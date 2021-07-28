@@ -1,4 +1,4 @@
-import asyncio, configparser, config, logging
+import asyncio, config, logging
 from aiogram import Bot, Dispatcher, executor, types
 
 logging.basicConfig(filename="app.log", filemode="w", level=logging.INFO)
@@ -9,12 +9,14 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
-    await bot.send_message(message.from_user.id, 'Бип-бип...\nПривет!\nЭтот бот был создан для распространения информации о статистике по коронавирусу (Covid-19)🦠', reply_markup=config.main_k)
-    await bot.send_sticker(message.from_user.id, 'CAACAgIAAxkBAAIIgF65ucQNXFE8q86mjl_E3OuLiPXzAALOAQACVp29Cq2jmuzmnvpMGQQ')
-    await bot.send_message(message.from_user.id, 'Нажми одну из кнопок внизу\n😉 🔽')
+    user_id = message.from_user.id
+
+    await bot.send_message(user_id, "Бип-бип...\nПривет!\nЭтот бот был создан для распространения информации о статистике по коронавирусу (Covid-19)🦠", reply_markup=config.get_keyboard("main"))
+    await bot.send_sticker(user_id, "CAACAgIAAxkBAAIIgF65ucQNXFE8q86mjl_E3OuLiPXzAALOAQACVp29Cq2jmuzmnvpMGQQ")
+    await bot.send_message(user_id, "Нажми одну из кнопок внизу\n😉 🔽")
 
 
-@dp.message_handler(content_types=['text'])
+@dp.message_handler(content_types=["text"])
 async def send_data(message: types.Message):
 
     user_id = message.from_user.id
@@ -22,52 +24,50 @@ async def send_data(message: types.Message):
 
 
     # main page
+    if text == "Узнать статистику 📊":
+        await bot.send_message(message.from_user.id, "Статистика в... 🔽", reply_markup=config.get_keyboard("stat"))
 
-    if text== 'Узнать статистику 📊':
-        await bot.send_message(message.from_user.id, 'Выбери ниже какую статистику ты хочешь узнать 😉 🔽', reply_markup=config.static_k)
+    elif text == "Рекомендации ВОЗ 😷":
+        message_keyboard = types.InlineKeyboardMarkup(True)
+        button = types.InlineKeyboardButton(text="Сайт ВОЗ 🌍", url="www.who.int/ru/emergencies/diseases/novel-coronavirus-2019")
+        message_keyboard.add(button)
+        await bot.send_message(user_id, "Всемирная организация здравоохранения", reply_markup=message_keyboard)
+        await bot.send_sticker(user_id, "CAACAgIAAxkBAAIIoV65vLrWbECKVD86BVQLM14hUQr4AALyAQACVp29CgqJR4ysf4fyGQQ")
 
-    elif text== 'Рекомендации ВОЗ 😷':
-        m = types.InlineKeyboardMarkup(True)
-        btn = types.InlineKeyboardButton(text='Сайт ВОЗ 🌍', url='www.who.int/ru/emergencies/diseases/novel-coronavirus-2019')
-        m.add(btn)
-        await bot.send_message(user_id, 'Всемирная организация здравоохранения', reply_markup=m)
-        await bot.send_sticker(user_id, 'CAACAgIAAxkBAAIIoV65vLrWbECKVD86BVQLM14hUQr4AALyAQACVp29CgqJR4ysf4fyGQQ')
-
-    elif text== 'Информация о проэкте':
-        await bot.send_message(user_id, 'Информация о проэкте', reply_markup=config.info_k)
+    elif text == "Информация о проэкте 📃":
+        await bot.send_message(user_id, "Информация о проэкте 📃", reply_markup=config.get_keyboard("info"))
 
 
     # static page
+    elif text == "Статистика в России 🇷🇺":
+        await bot.send_message(user_id, config.get_data("russia", "России 🇷🇺"))
 
-    elif text== 'Статистика в России 🇷🇺':
-        await bot.send_message(user_id, config.get_data("russia", "России 🇷🇺"), reply_markup=config.static_k)
+    elif text == "Статистика в мире 🌍":
+        await bot.send_message(user_id, config.get_data("world", ""))
 
-    elif text== 'Статистика в мире 🌍':
-        await bot.send_message(user_id, config.get_data("world", ""), reply_markup=config.static_k)
+    elif text == "Поиск 🔎":
+        await bot.send_message(user_id, "Введите название страны 🔽", reply_markup=config.get_keyboard("find"))
 
-    elif text== 'Узнать статистику в любой стране':
-        await bot.send_message(user_id, 'Введите название страны', reply_markup=config.find_k)
-
-    elif text == 'Вернуться к главному меню 🔄':
-        await bot.send_message(user_id, 'Главное меню', reply_markup=config.main_k)
+    elif text == "Вернуться к главному меню 🔄":
+        await bot.send_message(user_id, "Главное меню 🔁", reply_markup=config.get_keyboard("main"))
 
     elif (text.lower() in config.ru_country.keys()) or (text.lower() in config.db):
         country = text.lower()
         if country.lower() in config.ru_country.keys():
             country = config.ru_country[country.lower()]
-        await bot.send_message(user_id, config.get_data(country, text), reply_markup=config.find_k)
+        await bot.send_message(user_id, config.get_data(country, text))
 
 
     # info page
+    elif text== "Используемые ресурсы 📚":
+        await bot.send_message(user_id, "Источник информации 📊 - worldometers.info")
 
-    elif text== 'Используемые ресурсы':
-        await bot.send_message(user_id, 'База данных - worldometers.info', reply_markup=config.main_k)
 
     else:
         if (config.word_filter(text)):
-            await bot.send_message(user_id, 'Ненадо так 😣😭')
+            await bot.send_message(user_id, "Ненадо так 😣😭")
         else:
-            await bot.send_message(user_id, 'Я пока не могу выполнить данный запрос или найти статистику в этой стране 😔')
+            await bot.send_message(user_id, "Я пока не могу выполнить данный запрос или найти статистику в этой стране 😔")
 
 
 async def update_data(whait_for=3600):

@@ -17,8 +17,7 @@ def get_data()->dict:
                     n = "0"
                 data += [n]
             data = data[1:15]
+            # country, population, total_cases, active_cases, total_recovered, total_death, new_cases, new_recovered, new_deaths
             if not(data[0].isdigit()) and data[0].strip() != "Total:":
-                db[data[0].lower()] = {"country":data[0], "total_cases":data[1], "new_cases":data[2],
-                "total_deaths":data[3], "new_deaths":data[4], "total_recovered":data[5],
-                "new_recovered":data[6], "active_cases":data[7], "population":data[13]}
+                db[data[0].lower()] = [data[0], data[13], data[1], data[7], data[5], data[3], data[2], data[6], data[4]]
     return db
