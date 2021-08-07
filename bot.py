@@ -67,15 +67,17 @@ async def send_data(message: types.Message):
         if (config.word_filter(text)):
             await bot.send_message(user_id, "Ненадо так 😣😭")
         else:
-            await bot.send_message(user_id, "Я пока не могу выполнить данный запрос или найти статистику в этой стране 😔")
+            await bot.send_message(user_id, "Я не могу выполнить ваш запрос 😔")
 
 
+#update statistic
 async def update_data(whait_for=3600):
     while True:
         config.update_data()
         await asyncio.sleep(whait_for)
 
 
+#asyc run bot and update static
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.create_task(update_data(10800))

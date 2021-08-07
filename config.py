@@ -7,12 +7,15 @@ with open("filter.txt", "r", encoding="utf-8") as file:
 	words = file.read().split()
 
 
+#translate countries 
+
 ru_country = {"россия":"russia", "сша":"usa", "германия":"germany", "италия":"italy", "китай":"china",
 "япония":"japan", "польша":"poland", "украина":"ukraine", "великобритания":"uk", "афганистан":"afghanistan",
 "новая гвинея":"Papua New Guinea", "испания":"spain", "франция":"france", "бразилия":"brazil", "туркмения":"turkey",
 "иран":"iran", "индия":"india", "канада":"canada", "перу":"peru", "бельгия":"belgium",
 "ниделанды":"netherlands", "саудовская аравия":"saudi arabia", "мексика":"mexico", "пакистан":"pakistan", "швейцария":"switzerland",
 "чили":"chile", "эквадор":"ecuador", "португалия":"portugal", "беларусь":"belarus"}
+
 
 #keyboards
 
@@ -30,7 +33,7 @@ date = ""
 
 # functions
 
-def get_keyboard(name:str):
+def get_keyboard(name:str)->types.ReplyKeyboardMarkup:
 	keyboard = types.ReplyKeyboardMarkup(resize_keyboard = True)
 	for button in keyboards[name]:
 		keyboard.add(button)
@@ -60,6 +63,8 @@ def update_data():
 
 
 def get_data(country:str, text:str)->str:
+	if country.lower() not in db:
+		return "Ошибка в получении информации🧑‍💻\nПовторите попытку позже"
 	data = db[country.lower()]
 	if text.lower() in ["world", "мир"] or country in ["world", "мир"]:
 		return f"Статистика в мире 🌍 на {date}\n\nВсего заразились 😷: {data[2]}\nСейчас болеют 😷: {data[3]}\nВыздовели ✅: {data[4]}\nУмерли 💀: {data[5]}\n\nЗа последние 24 часа 🕓\nЗаболели 😷: {data[6]}\nВыздовели ✅: {data[7]}\nУмерли 💀: {data[8]}"
