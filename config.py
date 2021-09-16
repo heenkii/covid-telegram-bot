@@ -7,7 +7,7 @@ with open("filter.txt", "r", encoding="utf-8") as file:
 	words = file.read().split()
 
 
-#translate countries 
+#translate countries
 
 ru_country = {"россия":"russia", "сша":"usa", "германия":"germany", "италия":"italy", "китай":"china",
 "япония":"japan", "польша":"poland", "украина":"ukraine", "великобритания":"uk", "афганистан":"afghanistan",
@@ -25,6 +25,9 @@ keyboards ={
 "info":["Используемые ресурсы 📚", "Вернуться к главному меню 🔄"],
 "find":["Вернуться к главному меню 🔄"]}
 
+SETTINGS = {
+	"TOKEN" : ""
+}
 
 db = {}
 
@@ -38,12 +41,6 @@ def get_keyboard(name:str)->types.ReplyKeyboardMarkup:
 	for button in keyboards[name]:
 		keyboard.add(button)
 	return keyboard
-
-
-def get_bot_token()->str:
-    cfg = configparser.ConfigParser()
-    cfg.read("config.ini")
-    return cfg["bot_data"]["token"]
 
 
 def word_filter(text:str)->bool:
