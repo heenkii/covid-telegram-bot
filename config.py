@@ -51,9 +51,7 @@ def word_filter(text:str)->bool:
 
 def update_data():
 	global db
-	db = {}
-	data = webparser.get_data()
-	db = data
+	db = webparser.get_data()
 
 
 def get_data(country:str, text:str)->str:
