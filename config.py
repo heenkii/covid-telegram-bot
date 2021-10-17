@@ -25,14 +25,13 @@ keyboards ={
 "info":["Используемые ресурсы 📚", "Вернуться к главному меню 🔄"],
 "find":["Вернуться к главному меню 🔄"]}
 
+
 SETTINGS = {
-	"TOKEN" : ""
+	"TOKEN" : "",#string
+	"owner_id" : "",
 }
 
 db = {}
-
-date = ""
-
 
 # functions
 
@@ -51,10 +50,8 @@ def word_filter(text:str)->bool:
 
 
 def update_data():
-	global db, date
-	date = datetime.datetime.today().strftime("%d.%m")
+	global db
 	db = {}
-	# country, population, total_cases, active_cases, total_recovered, total_death, new_cases, new_recovered, new_deaths
 	data = webparser.get_data()
 	db = data
 
@@ -63,8 +60,32 @@ def get_data(country:str, text:str)->str:
 	if country.lower() not in db:
 		return "Ошибка в получении информации🧑‍💻\nПовторите попытку позже"
 	data = db[country.lower()]
+
 	if text.lower() in ["world", "мир"] or country in ["world", "мир"]:
-		return f"Статистика в мире 🌍 на {date}\n\nВсего заразились 😷: {data[2]}\nСейчас болеют 😷: {data[3]}\nВыздовели ✅: {data[4]}\nУмерли 💀: {data[5]}\n\nЗа последние 24 часа 🕓\nЗаболели 😷: {data[6]}\nВыздовели ✅: {data[7]}\nУмерли 💀: {data[8]}"
+		return f'''Статистика в мире 🌍 на {db["date"]}
+
+		Всего заразились 😷: {data["total_cases"]}
+		Сейчас болеют 😷: {data["active_cases"]}
+		Выздовели ✅: {data["total_recovered"]}
+		Умерли 💀: {data["total_death"]}
+
+За последние 24 часа 🕓
+		Заболели 😷: {data["new_cases"]}
+		Выздовели ✅: {data["new_recovered"]}
+		Умерли 💀: {data["new_deaths"]}'''
+
 	if text.lower() in ["russia", "россия"]:
 		text = "России 🇷🇺"
-	return f"Статистика в {text.title()} на {date}\n\nНаселение {data[1]} человек\n\nВсего заразились 😷: {data[2]}\nСейчас болеют 😷: {data[3]}\nВыздовели ✅: {data[4]}\nУмерли 💀: {data[5]}\n\nЗа последние 24 часа 🕓\nЗаболели 😷: {data[6]}\nВыздовели ✅: {data[7]}\nУмерли 💀: {data[8]}"
+	return f'''Статистика в {text.title()} на {db["date"]}
+
+Население {data["population"]} человек
+
+		Всего заразились 😷: {data["total_cases"]}
+		Сейчас болеют 😷: {data["active_cases"]}
+		Выздовели ✅: {data["total_recovered"]}
+		Умерли 💀: {data["total_death"]}
+
+За последние 24 часа 🕓
+		Заболели 😷: {data["new_cases"]}
+		Выздовели ✅: {data["new_recovered"]}
+		Умерли 💀: {data["new_deaths"]}'''

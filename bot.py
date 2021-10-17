@@ -1,7 +1,6 @@
 import asyncio, config, logging
 from aiogram import Bot, Dispatcher, executor, types
 
-logging.basicConfig(filename="app.log", filemode="w", level=logging.INFO)
 
 bot = Bot(token=config.SETTINGS["TOKEN"])
 dp = Dispatcher(bot)
@@ -11,9 +10,17 @@ dp = Dispatcher(bot)
 async def start(message: types.Message):
     user_id = message.from_user.id
 
-    await bot.send_message(user_id, "Бип-бип...\nПривет!\nЭтот бот был создан для распространения информации о статистике по коронавирусу (Covid-19)🦠", reply_markup=config.get_keyboard("main"))
+    await bot.send_message(user_id, "Бип-бип...\nПривет!\nЭтот бот был разработан для распространения информации о короновирусной инфекции (Covid-19)🦠", reply_markup=config.get_keyboard("main"))
     await bot.send_sticker(user_id, "CAACAgIAAxkBAAIIgF65ucQNXFE8q86mjl_E3OuLiPXzAALOAQACVp29Cq2jmuzmnvpMGQQ")
     await bot.send_message(user_id, "Нажми одну из кнопок внизу\n😉 🔽")
+
+
+@dp.message_handler(commands=["update"])
+async def update(message: types.Message):
+    user_id = message.from_user.id
+    if int(config.SETTINGS["owner_id"]) == user_id:
+        config.update_data()
+        await bot.send_message(user_id, "База данных обновлена ✅")
 
 
 @dp.message_handler(content_types=["text"])
@@ -51,7 +58,7 @@ async def send_data(message: types.Message):
     elif text == "Вернуться к главному меню 🔄":
         await bot.send_message(user_id, "Главное меню 🔁", reply_markup=config.get_keyboard("main"))
 
-    elif (text.lower() in config.ru_country.keys()) or (text.lower() in config.db):
+    elif ( (text.lower() in config.ru_country.keys()) or (text.lower() in config.db) ) and (text.lower() != "date"):
         country = text.lower()
         if country.lower() in config.ru_country.keys():
             country = config.ru_country[country.lower()]
