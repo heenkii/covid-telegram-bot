@@ -1,12 +1,20 @@
-import asyncio, config, logging
+import asyncio, config
+
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.dispatcher.filters import Filter
 
 
 bot = Bot(token=config.SETTINGS["TOKEN"])
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands=["start"])
+class IsAdmin(Filter):
+
+    async def check(self, message: types.Message)->bool:
+        return message.from_user.id == int(config.SETTINGS["OWNER_ID"])
+
+
+@dp.message_handler(commands = "start")
 async def start(message: types.Message):
     user_id = message.from_user.id
 
@@ -15,12 +23,10 @@ async def start(message: types.Message):
     await bot.send_message(user_id, "Нажми одну из кнопок внизу\n😉 🔽")
 
 
-@dp.message_handler(commands=["update"])
+@dp.message_handler(IsAdmin(), commands = "update")
 async def update(message: types.Message):
-    user_id = message.from_user.id
-    if int(config.SETTINGS["owner_id"]) == user_id:
-        config.update_data()
-        await bot.send_message(user_id, "База данных обновлена ✅")
+    config.update_data()
+    await bot.send_message(message.from_user.id, "База данных обновлена ✅")
 
 
 @dp.message_handler(content_types=["text"])
@@ -86,6 +92,7 @@ async def update_data(whait_for=3600):
 
 #async run bot and update static
 if __name__ == "__main__":
+    dp.bind_filter(IsAdmin)
     loop = asyncio.get_event_loop()
     loop.create_task(update_data(10800))
     executor.start_polling(dp, skip_updates=True)
