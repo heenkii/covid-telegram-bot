@@ -1,0 +1,52 @@
+'''
+ru_country = {
+    'северная америка': 'north america', 'азия': 'asia', 'южная америка': 'south america', 'европа': 'europe', 'африка': 'africa',
+    'Океания': 'oceania', 'мир': 'world', 'сша': 'usa', 'индия': 'india', 'бразилия': 'brazil', 'Великобритания': 'uk',
+    'россия': 'russia', 'турция': 'turkey', 'франция': 'france', 'иран': 'iran', 'аргентина': 'argentina', 'германия': 'germany',
+    'испания': 'spain', 'колумбия': 'colombia', 'италия': 'italy', 'индонезия': 'indonesia', 'мексика': 'mexico', 'украина': 'ukraine',
+    'польша': 'poland', 'южная африка': 'south africa', 'филиппины': 'philippines', 'малайзия': 'malaysia', 'нидерланды': 'netherlands',
+    'перу': 'peru', 'ирак': 'iraq', 'таиланд': 'thailand', 'чехия': 'czechia', 'канада': 'canada', 'румыния': 'romania', 'чили': 'chile',
+    'япония': 'japan', 'бельгия': 'belgium', 'бангладеш': 'bangladesh', 'израиль': 'israel', 'пакистан': 'pakistan', 'сербия': 'serbia',
+    'швеция': 'sweden', 'португалия': 'portugal', 'вьетнам': 'vietnam', 'австрия': 'austria', 'венгрия': 'hungary', 'казахстан': 'kazakhstan',
+    'куба': 'cuba', 'марокко': 'morocco', 'швейцария': 'switzerland', 'иордания': 'jordan', 'греция': 'greece', 'непал': 'nepal',
+    'грузия': 'georgia', 'оаэ': 'uae', 'тунис': 'tunisia', 'болгария': 'bulgaria', 'ливан': 'lebanon', 'беларусь': 'belarus',
+    'гватемала': 'guatemala', 'словакия': 'slovakia', 'азербайджан': 'azerbaijan', 'Коста-Рика': 'costa rica', 'хорватия': 'croatia',
+    'шри-ланка': 'sri lanka', 'саудовская аравия': 'saudi arabia', 'боливия': 'bolivia', 'эквадор': 'ecuador', 'ирландия': 'ireland',
+    'мьянма': 'myanmar', 'панама': 'panama', 'парагвай': 'paraguay', 'литва': 'lithuania', 'денмарк': 'denmark', 'палестина': 'palestine',
+    'венесуэла': 'venezuela', 'кувейт': 'kuwait', 'с. корея': 's. korea', 'доминиканская республика': 'dominican republic', 'уругвай': 'uruguay',
+    'словения': 'slovenia', 'гондурас': 'honduras', 'монголия': 'mongolia', 'этиопия': 'ethiopia', 'ливия': 'libya', 'молдова': 'moldova',
+    'египет': 'egypt', 'армения': 'armenia', 'оман': 'oman', 'бахрейн': 'bahrain', 'босния и герцеговина': 'bosnia and herzegovina',
+    'кения': 'kenya', 'сингапур': 'singapore', 'латвия': 'latvia', 'катар': 'qatar', 'норвегия': 'norway', 'эстония': 'estonia',
+    'нигерия': 'nigeria', 'северная македония': 'north macedonia', 'замбия': 'zambia', 'алжир': 'algeria', 'австралия': 'australia',
+    'албания': 'albania', 'ботсвана': 'botswana', 'узбекистан': 'uzbekistan', 'кыргызстан': 'kyrgyzstan', 'финляндия': 'finland',
+    'афганистан': 'afghanistan', 'черногория': 'montenegro', 'мозамбик': 'mozambique', 'зимбабве': 'zimbabwe', 'гана': 'ghana',
+    'кипр': 'cyprus', 'намибия': 'namibia', 'уганда': 'uganda', 'камбоджа': 'cambodia', 'эль-сальвадор': 'el salvador',
+    'камерун': 'cameroon', 'руанда': 'rwanda', 'ямайка': 'jamaica', 'мальдивы': 'maldives', 'люксембург':
+    'luxembourg', 'сенегал': 'senegal', 'ангола': 'angola', 'тринидад и тобаго': 'trinidad and tobago',
+    'малави': 'malawi', 'побережье слоновой кости': 'ivory coast', 'лаос': 'laos', 'дрк': 'drc', 'реюньон': 'réunion',
+    'гваделупа': 'guadeloupe', 'фиджи': 'fiji', 'суринам': 'suriname', 'сирия': 'syria', 'эсватини': 'eswatini',
+    'французская гвиана': 'french guiana', 'мартиника': 'martinique', 'мадагаскар': 'madagascar', 'судан': 'sudan',
+    'французская полинезия': 'french polynesia', 'мальта': 'malta', 'мавритания': 'mauritania', 'кабо-верде': 'cabo verde',
+    'гайана': 'guyana', 'габон': 'gabon', 'папуа - новая гвинея': 'papua new guinea', 'гвинея': 'guinea', 'белиз': 'belize',
+    'танзания': 'tanzania', 'того': 'togo', 'бенин': 'benin', 'гаити': 'haiti', 'барбадос': 'barbados', 'сомали': 'somalia',
+    'сейшельские острова': 'seychelles', 'багамские острова': 'bahamas', 'лесото': 'lesotho', 'майотта': 'mayotte', 'бурунди':
+    'burundi', 'тимор-лесте': 'timor-leste', 'маврикий': 'mauritius', 'конго': 'congo', 'кюрасао': 'curaçao',
+    'таджикистан': 'tajikistan', 'никарагуа': 'nicaragua', 'мали': 'mali', 'тайвань': 'taiwan', 'исландия': 'iceland',
+    'аруба': 'aruba', 'андорра': 'andorra', 'острова канала': 'channel islands', 'буркина-фасо': 'burkina faso', 'бруней':
+    'brunei', 'экваториальная гвинея': 'equatorial guinea', 'джибути': 'djibouti', 'Сент-Люсия': 'saint lucia', 'южный судан': 'south sudan',
+    'хонг-конг': 'hong kong', 'новая каледония': 'new caledonia', 'автомобиль': 'car', 'остров мэн': 'isle of man',
+    'гамбия': 'gambia', 'йемен': 'yemen', 'новая зеландия': 'new zealand', 'эритрея': 'eritrea', 'гибралтар': 'gibraltar',
+    'нигер': 'niger', 'гвинея-бисау': 'guinea-bissau', 'сьерра-леоне': 'sierra leone', 'гренада': 'grenada', 'либерия': 'liberia',
+    'бермуды': 'bermuda', 'сан-марино': 'san marino', 'доминикана': 'dominica', 'каймановы острова': 'cayman islands',
+    'Сент-Винсент Гренадины': 'st. vincent grenadines', 'чад': 'chad', 'сент-мартен': 'sint maarten', 'коморские острова':
+    'comoros', 'антигуа и барбуда': 'antigua and barbuda', 'лихтенштейн': 'liechtenstein', 'сент-мартин': 'saint martin',
+    'сан-томе и принсипи': 'sao tome and principe', 'монако': 'monaco', 'фарерские острова': 'faeroe islands',
+    'теркс и кайкос': 'turks and caicos', 'Сент-Китс и Невис': 'saint kitts and nevis', 'британские виргинские острова': 'british virgin islands',
+    'карибские нидерланды': 'caribbean netherlands', 'бутан': 'bhutan', 'Сент-Барт': 'st. barth', 'ангилья': 'anguilla', 'гренландия': 'greenland',
+    'бриллиантовая принцесса': 'diamond princess', 'уоллис и футуна': 'wallis and futuna', 'макао': 'macao',
+    'фолклендские острова': 'falkland islands', 'монтсеррат': 'montserrat', 'святой пьер микелон': 'saint pierre miquelon',
+    'город ватикан': 'vatican city', 'соломоновы острова': 'solomon islands', 'западная сахара': 'western sahara',
+    'мс заандам': 'ms zaandam', 'палау': 'palau', 'вануату': 'vanuatu', 'маршалловы острова': 'marshall islands', 'самоа': 'samoa',
+    'остров святой елены': 'saint helena', 'микронезия': 'micronesia', 'тонга': 'tonga', 'китай': 'china'
+}
+'''
