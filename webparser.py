@@ -1,6 +1,13 @@
-import datetime
 import requests as rq
 from bs4 import BeautifulSoup as BS
+
+
+def split_num(num: int) -> str:
+    num = str(num)
+    for ind in range(len(num), 0, -3):
+        if ind != len(num):
+            num = num[:ind] + " " + num[ind:]
+    return num
 
 
 def get_data() -> dict:
@@ -24,13 +31,13 @@ def get_data() -> dict:
                 if not(data[0].isdigit()) and data[0].strip() != "Total:":
                     db[data[0].lower()] = {
                         "country": data[0],
-                        "population": data[13],
-                        "total_case": data[1],
-                        "active_case": data[7],
-                        "total_recover": data[5],
-                        "total_death": data[3],
-                        "new_case": data[2],
-                        "new_recover": data[6],
-                        "new_death": data[4],
+                        "population": split_num(data[13]),
+                        "total_case": split_num(data[1]),
+                        "active_case": split_num(data[7]),
+                        "total_recover": split_num(data[5]),
+                        "total_death": split_num(data[3]),
+                        "new_case": split_num(data[2]),
+                        "new_recover": split_num(data[6]),
+                        "new_death": split_num(data[4]),
                     }
     return db

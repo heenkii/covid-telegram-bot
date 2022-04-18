@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from handlers import admin, client
 
 import asyncio
-import config
+import handlers.tools as tools
 from sqlighter import Database
 
 

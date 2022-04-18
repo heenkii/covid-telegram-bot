@@ -1,27 +1,27 @@
 import sqlite3
-import settings
 import webparser
 
+from settings import Config
 from datetime import datetime
 
 
 class Database:
 
     def __init__(self) -> None:
-        self.db = sqlite3.connect(settings.Config["DATABASE"])
+        self.db = sqlite3.connect(Config["DATABASE"])
         self.sql = self.db.cursor()
         self.sql.execute("""CREATE TABLE IF NOT EXISTS covid_data (
             country_ru TEXT,
             country_en TEXT,
             date_update TEXT,
-            population INT,
-            total_case INT,
-            active_case INT,
-            total_recover INT,
-            total_death INT,
-            new_case INT,
-            new_recover INT,
-            new_death INT);""")
+            population TEXT,
+            total_case TEXT,
+            active_case TEXT,
+            total_recover TEXT,
+            total_death TEXT,
+            new_case TEXT,
+            new_recover TEXT,
+            new_death TEXT);""")
         self.db.commit()
 
     def get_country_data(self, country) -> dict or bool:
