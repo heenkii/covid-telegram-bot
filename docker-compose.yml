@@ -3,5 +3,5 @@ version: "3.3"
 services:
   covid-bot:
     build:
-      context: .
+      context: ./src/
     container_name: bot

@@ -20,12 +20,12 @@ def get_data(country: str, text: str) -> str:
 
 Население {country_data["population"]} человек
 
-		Всего заразились 😷: {country_data["total_case"]}
-		Сейчас болеют 😷: {country_data["active_case"]}
-		Выздовели ✅: {country_data["total_recover"]}
-		Умерли 💀: {country_data["total_death"]}
+		Всего заразились 😷: {country_data["total_case"] if country_data["total_case"] != "N one" else "-"}
+		Сейчас болеют 😷: {country_data["active_case"] if country_data["active_case"] != "N one" else "-"}
+		Выздовели ✅: {country_data["total_recover"] if country_data["total_recover"] != "N one" else "-"}
+		Умерли 💀: {country_data["total_death"] if country_data["total_death"] != "N one" else "-"}
 
 За последние 24 часа 🕓
-		Заболели 😷: {country_data["new_case"]}
-		Выздовели ✅: {country_data["new_recover"]}
-		Умерли 💀: {country_data["new_death"]}'''
+		Заболели 😷: {country_data["new_case"] if country_data["new_case"] != "N one" else "-"}
+		Выздовели ✅: {country_data["new_recover"] if country_data["new_recover"] != "N one" else "-"}
+		Умерли 💀: {country_data["new_death"] if country_data["new_death"] != "N one" else "-"}'''
