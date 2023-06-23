@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/nikolai/Library/Mobile Documents/com~apple~CloudDocs/Macbook air/Code/RuVDS/covid_telegram_bot/venv/bin/python3" "$0" "$@"
-' '''
+#!/Users/nikolai/Files/server-settings/covid-telegram-bot/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

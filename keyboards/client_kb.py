@@ -19,7 +19,7 @@ rec_inline_kb.add(button)
 main_kb = ReplyKeyboardMarkup(resize_keyboard=True)
 main_kb.add("Узнать статистику 📊")
 main_kb.add("Рекомендации ВОЗ 😷")
-main_kb.insert("Информация о проэкте 📃")
+main_kb.insert("Информация о проекте 📃")
 
 
 countries_kb = ReplyKeyboardMarkup(resize_keyboard=True)

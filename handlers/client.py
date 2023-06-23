@@ -44,7 +44,7 @@ async def recomendation(message: types.Message):
 async def about_project(message: types.Message):
     await Fsm_user.info_page.set()
     await bot.send_message(message.from_user.id,
-                           "Информация о проэкте 📃",
+                           "Информация о проекте 📃",
                            reply_markup=client_kb.info_kb)
 
 
@@ -112,7 +112,7 @@ def register_handlers(dp: Dispatcher):
                                 state=Fsm_user.main_page)
 
     dp.register_message_handler(about_project,
-                                Text(equals="Информация о проэкте 📃"),
+                                Text(equals="Информация о проекте 📃"),
                                 state=Fsm_user.main_page)
 
     dp.register_message_handler(statistic_in_russia,
