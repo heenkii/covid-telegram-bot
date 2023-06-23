@@ -15,7 +15,7 @@ def get_data(country: str, text: str) -> str:
 
     if text.lower() in ["russia", "россия"]:
         text = "России 🇷🇺"
-    return f'''Статистика в {text} на {country_data["date_update"]}
+    return f'''Статистика в {text} на {country_data["date_update"] if country_data["date_update"] else "-"}
 
 
 Население {country_data["population"]} человек
