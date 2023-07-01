@@ -5,3 +5,15 @@ services:
     build:
       context: ./src/
     container_name: bot
+    restart: always
+    depends_on:
+      - mongoDB
+
+  mongoDB:
+    image: mongo
+    container_name: database
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - ./datadir:/data/db

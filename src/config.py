@@ -1,0 +1,6 @@
+TOKEN = ""
+OWNER_ID =
+DATABASE = "./database.db"
+MONGO_URI = ""
+MONGO_DATABASE = ""
+MONGO_COLLECTION = ""

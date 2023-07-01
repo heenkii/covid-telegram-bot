@@ -1,10 +1,10 @@
-from create_bot import bot, dp
-from aiogram import Bot, Dispatcher, executor, types
-from handlers import admin, client
+from aiogram import executor
+from handlers import dp
+from loader import bot
 
 import asyncio
-import handlers.tools as tools
-from sqlighter import Database
+
+from utils.sqlighter import Database
 
 
 # update statistic
@@ -23,7 +23,5 @@ Bot {me.first_name} start
 
     # async run bot and update static
 if __name__ == "__main__":
-    admin.register_handlers(dp=dp)  # необходимо для корректной работы handlers
-    client.register_handlers(dp=dp)
     asyncio.get_event_loop().create_task(update_data(10800))
     executor.start_polling(dp, on_startup=start_bot, skip_updates=True)
