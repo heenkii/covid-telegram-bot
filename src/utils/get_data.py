@@ -13,7 +13,7 @@ def get_data(country: str, text: str) -> str:
 
     if text.lower() in ["russia", "россия"]:
         text = "России 🇷🇺"
-    return f'''Статистика в {text} на {country_data["date_update"]}
+    return f"""Статистика в {text} на {country_data["date_update"]}
 
 
 Население {country_data["population"]} человек
@@ -26,4 +26,4 @@ def get_data(country: str, text: str) -> str:
 За последние 24 часа 🕓
 		Заболели 😷: {country_data["new_case"]}
 		Выздовели ✅: {country_data["new_recover"]}
-		Умерли 💀: {country_data["new_death"]}'''
+		Умерли 💀: {country_data["new_death"]}"""

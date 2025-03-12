@@ -4,12 +4,14 @@ from utils import webparser
 from datetime import datetime
 from config import DATABASE
 
+
 class Database:
 
     def __init__(self) -> None:
         self.db = sqlite3.connect(DATABASE)
         self.sql = self.db.cursor()
-        self.sql.execute("""CREATE TABLE IF NOT EXISTS covid_data (
+        self.sql.execute(
+            """CREATE TABLE IF NOT EXISTS covid_data (
             country_ru TEXT,
             country_en TEXT,
             date_update TEXT,
@@ -20,7 +22,8 @@ class Database:
             total_death TEXT,
             new_case TEXT,
             new_recover TEXT,
-            new_death TEXT);""")
+            new_death TEXT);"""
+        )
         self.db.commit()
 
     def get_country_data(self, country) -> dict or bool:
@@ -73,7 +76,8 @@ class Database:
                     new_death = ?
                     WHERE country_en = ?"""
                     self.sql.execute(
-                        query, [
+                        query,
+                        [
                             update_date,
                             parse_data[country]["population"],
                             parse_data[country]["total_case"],
@@ -84,7 +88,7 @@ class Database:
                             parse_data[country]["new_recover"],
                             parse_data[country]["new_death"],
                             country,
-                        ]
+                        ],
                     )
                     self.db.commit()
             return True

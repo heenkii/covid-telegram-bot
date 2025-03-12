@@ -4,12 +4,15 @@ from utils import get_data
 from keyboards.default import countries_keyboard
 
 from aiogram import types
+
+
 @dp.message_handler(text="Узнать статистику 📊", state=user_states.main_page)
 async def get_statistic_page(message: types.Message):
     await user_states.countries_page.set()
-    await bot.send_message(message.from_user.id,
-                           "Статистика в... 🔽",
-                           reply_markup=countries_keyboard)
+    await bot.send_message(
+        message.from_user.id, "Статистика в... 🔽", reply_markup=countries_keyboard
+    )
+
 
 @dp.message_handler(text="Статистика в России 🇷🇺", state=user_states.countries_page)
 async def statistic_in_russia(message: types.Message):

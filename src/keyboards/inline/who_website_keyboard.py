@@ -5,7 +5,7 @@ who_website_inline_keyboard = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(
                 text="Сайт ВОЗ 🌍",
-                url="www.who.int/ru/emergencies/diseases/novel-coronavirus-2019"
+                url="www.who.int/ru/emergencies/diseases/novel-coronavirus-2019",
             )
         ]
     ]

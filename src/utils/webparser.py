@@ -10,7 +10,6 @@ def split_num(num: int) -> str:
     return num
 
 
-
 def get_data() -> dict:
     url = "https://www.worldometers.info/coronavirus/"
     html = rq.get(url).text
@@ -18,7 +17,9 @@ def get_data() -> dict:
 
     db = {}
 
-    for el in soup.select(".main_table_countries_div > .table-bordered > tbody")[:2]:
+    elements = soup.select(".main_table_countries_div > .table-bordered > tbody")[:2]
+
+    for el in elements:
         for unit in el.select("tr"):
             data = []
             for s in unit.find_all("td"):
@@ -27,9 +28,11 @@ def get_data() -> dict:
                     n = "-"
                 data += [n]
             data = data[1:15]
-            # country, population, total_cases, active_cases, total_recovered, total_death, new_cases, new_recovered, new_deaths
+            # country, population, total_cases,
+            # active_cases, total_recovered, total_death,
+            # new_cases, new_recovered, new_deaths
             if data[0] != None:
-                if not(data[0].isdigit()) and data[0].strip() != "Total:":
+                if not (data[0].isdigit()) and data[0].strip() != "Total:":
                     db[data[0].lower()] = {
                         "country": data[0],
                         "population": split_num(data[13]),

@@ -3,3 +3,5 @@ requests==2.31.0
 bs4==0.0.1
 pymongo==4.4.0
 motor==3.2.0
+pytest==8.3.5
+pytest-asyncio==0.25.3
