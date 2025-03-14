@@ -1,8 +1,7 @@
-from loader import dp, bot
 from FSM import user_states
-from keyboards.default import main_keyboard
-
 from aiogram import types
+from keyboards.default import main_keyboard
+from loader import dp, bot
 
 
 @dp.message_handler(text="Вернуться к главному меню 🔄", state="*")

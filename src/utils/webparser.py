@@ -17,13 +17,15 @@ def get_data() -> dict:
 
     db = {}
 
-    elements = soup.select(".main_table_countries_div > .table-bordered > tbody")[:2]
+    elements = soup.select(".table-bordered > tbody")[:2]
 
     for el in elements:
         for unit in el.select("tr"):
             data = []
             for s in unit.find_all("td"):
-                n = s.get_text().strip().replace(",", "").replace("+", "")
+                n = (s.get_text()
+                     .strip().replace(",", "")
+                     .replace("+", ""))
                 if n in ["", "N/A"]:
                     n = "-"
                 data += [n]
@@ -31,7 +33,7 @@ def get_data() -> dict:
             # country, population, total_cases,
             # active_cases, total_recovered, total_death,
             # new_cases, new_recovered, new_deaths
-            if data[0] != None:
+            if data[0]:
                 if not (data[0].isdigit()) and data[0].strip() != "Total:":
                     db[data[0].lower()] = {
                         "country": data[0],

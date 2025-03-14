@@ -64,7 +64,7 @@ class Database:
             for country in parse_data:
                 country = country.strip().lower()
                 if country in db_countries:
-                    query = f"""UPDATE covid_data SET
+                    query = """UPDATE covid_data SET
                     date_update = ?,
                     population = ?,
                     total_case = ?,
@@ -92,7 +92,8 @@ class Database:
                     )
                     self.db.commit()
             return True
-        except:
+        except Exception as exp:
+            print(exp)
             return False
 
     def close(self) -> None:

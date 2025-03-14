@@ -1,3 +1,3 @@
-from .update_data_handler import dp
+from .update_data_handler import dp  # noqa: F401
 
-__all__ = ["dp"]
+__all__ = ["dp"]  # noqa: F401

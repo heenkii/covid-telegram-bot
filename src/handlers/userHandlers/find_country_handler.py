@@ -11,7 +11,9 @@ import json
 async def get_find_page(message: types.Message):
     await user_states.find_page.set()
     await bot.send_message(
-        message.from_user.id, "Введите название страны 🔽", reply_markup=find_keyboard
+        message.from_user.id,
+        "Введите название страны 🔽",
+        reply_markup=find_keyboard
     )
 
 
@@ -26,9 +28,13 @@ async def find_statistic(message: types.Message):
     if country == "date":
         flag = False
 
-    if flag == True:
+    if flag:
         if country.lower() in countries.keys():
             country = countries[country.lower()]
-        await bot.send_message(message.from_user.id, get_data(country, message.text))
+        await bot.send_message(
+            message.from_user.id,
+            get_data(country, message.text))
     else:
-        await bot.send_message(message.from_user.id, "У меня нет такой информации 😔")
+        await bot.send_message(
+            message.from_user.id,
+            "У меня нет такой информации 😔")

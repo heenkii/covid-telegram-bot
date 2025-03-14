@@ -1,7 +1,6 @@
 from loader import dp, bot
 from keyboards.inline import who_website_inline_keyboard
 from FSM import user_states
-
 from aiogram import types
 
 
@@ -14,5 +13,6 @@ async def recomendation(message: types.Message):
     )
     await bot.send_sticker(
         message.from_user.id,
-        "CAACAgIAAxkBAAIIoV65vLrWbECKVD86BVQLM14hUQr4AALyAQACVp29CgqJR4ysf4fyGQQ",
+        "CAACAgIAAxkBAAIIoV65vLrWbECKVD8",
+        "6BVQLM14hUQr4AALyAQACVp29CgqJR4ysf4fyGQQ"
     )
