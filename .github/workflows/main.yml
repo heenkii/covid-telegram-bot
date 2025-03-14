@@ -54,7 +54,7 @@ jobs:
         with:
           host: ${{ secrets.reMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.remOTE_KEY }}
+          key: ${{ secrets.REMOTE_KEY }}
           source: .
           target: /home/admin/my-website
       - name: Deploy on remote server
@@ -65,5 +65,5 @@ jobs:
           key: ${{ secrets.REMOTE_KEY }}
           script: |-
             cd /home/admin/my-website 
-            docker-compose pull
-            docker-compose up -d --build
+            docker compose pull
+            docker compose up -d --build
