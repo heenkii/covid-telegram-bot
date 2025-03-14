@@ -1,6 +1,12 @@
-TOKEN = "1293252756:AAF2ELwRlWErOpO2zlIoSeeo9jzGR3-lkWs"
-OWNER_ID = 379829134
-DATABASE = "./database.db"
-MONGO_HOST = "mongoDB"
-MONGO_PORT = 27017
-MONGO_DATABASE = "aiogram-states"
+from dotenv import load_dotenv
+from os import getenv
+
+
+load_dotenv()
+
+TOKEN = getenv("TOKEN")
+OWNER_ID = getenv("OWNER_ID")
+DATABASE = getenv("DATABASE")
+MONGO_HOST = getenv("MONGO_HOST")
+MONGO_PORT = getenv("MONGO_PORT")
+MONGO_DATABASE = getenv("MONGO_DATABASE")

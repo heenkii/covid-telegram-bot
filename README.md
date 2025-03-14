@@ -2,6 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Aiogram](https://img.shields.io/badge/Aiogram-2.x-green)
+![Docker](https://img.shields.io/badge/docker-4.x-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 Добро пожаловать в **COVID-19 Telegram Bot**! Этот бот создан для предоставления актуальной информации и статистики о коронавирусной инфекции (COVID-19) прямо в Telegram. Он прост в использовании, поддерживает интерактивные команды и предоставляет данные в удобном формате.
@@ -25,24 +26,8 @@
 ### 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/yourusername/covid_telegram_bot.git
+git clone https://github.com/heenkii/covid_telegram_bot.git
 cd covid_telegram_bot
-```
-
-### 2. Установите зависимости
-
-Создайте виртуальное окружение и установите необходимые пакеты:
-
-```bash
-python -m venv venv
-source venv/bin/activate  # Для Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-Если файла `requirements.txt` пока нет, установите `aiogram` вручную:
-
-```bash
-pip install aiogram
 ```
 
 ### 3. Настройте конфигурацию

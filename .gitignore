@@ -1,6 +1,4 @@
 __pycache__/
-*.py[cod]
-*$py.class
 
 *.log
 *.tmp
@@ -14,6 +12,7 @@ venv/
 
 *.sqlite3
 *.db
+database.db
 
 datadir/
 
@@ -24,6 +23,7 @@ docker-compose.override.yml
 Pipfile
 Pipfile.lock
 poetry.lock
+
 
 .vscode/
 .idea/

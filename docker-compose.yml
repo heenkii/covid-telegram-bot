@@ -9,9 +9,11 @@ services:
       - "./datadir:/data/db"
 
   covid-bot:
-     build:
-       context: ./src/
-     container_name: bot
-     restart: always
-     depends_on:
-       - mongoDB
+    build:
+      context: ./src/
+    container_name: bot
+    restart: always
+    depends_on:
+      - mongoDB
+    env_file:
+      - .env
