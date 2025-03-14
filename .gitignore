@@ -1,4 +1,4 @@
-__pycache__/
+*/__pycache__/
 
 *.log
 *.tmp
@@ -14,7 +14,7 @@ venv/
 *.db
 database.db
 
-datadir/
+*/datadir/
 
 docker-compose.override.yml
 *.dockerfile
