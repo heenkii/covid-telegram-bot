@@ -21,7 +21,6 @@ jobs:
           python-version: ${{ matrix.version }}
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
           pip install flake8
       - name: Run flake8
         run: flake8 .
