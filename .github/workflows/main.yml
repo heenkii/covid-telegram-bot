@@ -45,7 +45,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Полная история для гарантии всех файлов
       - name: Generate .env file
         run: |
           echo "Generating .env from .env.example"
@@ -53,34 +53,45 @@ jobs:
             cp .env.example .env
             sed -i "s|^TOKEN=.*|TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}|" .env
             sed -i "s|^OWNER_ID=.*|OWNER_ID=${{ secrets.BOT_OWNER_ID }}|" .env
+            echo "✅ .env generated:"
             cat .env
           else
             echo "❌ .env.example not found"
             exit 1
           fi
-      - name: Verify files in workspace
+      - name: Verify project structure
         run: |
           echo "Listing all files in workspace:"
           ls -laR .
-          echo "Checking specific files:"
-          for file in src/requirements.txt src/config.py Dockerfile .env.example docker-compose.yml; do
+          echo "Checking required files:"
+          for file in src/requirements.txt src/bot.py src/Dockerfile docker-compose.yml .env.example .env; do
             if [ -f "$file" ]; then
               echo "✅ $file exists"
             else
               echo "❌ $file missing"
+              exit 1
             fi
           done
+      - name: Prepare files for transfer
+        run: |
+          echo "Copying required files to a temporary directory"
+          mkdir -p temp_deploy
+          cp -r src temp_deploy/
+          cp docker-compose.yml temp_deploy/
+          cp .env temp_deploy/
+          echo "Files in temp_deploy:"
+          ls -laR temp_deploy/
       - name: Copy project to remote server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: "src/,.env,docker-compose.yml" # Передаем только src/, .env и docker-compose.yml
+          source: "temp_deploy/*" # Передаем только содержимое temp_deploy
           target: /home/admin/covid-bot
-          strip_components: 1 # Убираем вложенность
-          rm: false
-          debug: true
+          strip_components: 1 # Убираем вложенность temp_deploy
+          rm: false # Не удаляем целевую директорию
+          debug: true # Подробные логи
       - name: Deploy on remote server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -90,6 +101,7 @@ jobs:
           script: |
             echo "Deploying to /home/admin/covid-bot"
             cd /home/admin/covid-bot || { echo "❌ Directory not found"; exit 1; }
+            ls -la  # Проверка содержимого на сервере
             docker compose pull || { echo "❌ Failed to pull images"; exit 1; }
             docker compose up -d --build || { echo "❌ Failed to start services"; exit 1; }
             docker compose ps
