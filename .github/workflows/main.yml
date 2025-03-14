@@ -49,16 +49,18 @@ jobs:
           cp .env.example .env
           sed -i "s/^TOKEN=.*/TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}/" .env
           sed -i "s/^OWNER_ID=.*/OWNER_ID=${{ secrets.BOT_OWNER_ID }}/" .env
-      - name: Change permisions
-        run: chmod 644 .
+      - name: Change permissions recursively
+        run: |
+          chmod -R 644 .  # Устанавливаем права 644 рекурсивно для всех файлов и директорий
       - name: Copy project to remote server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: .
+          source: ./*,.env,.gitignore,docker-compose.yml  # Указываем конкретные файлы/папки для передачи
           target: /home/admin/covid-bot
+          strip_components: 1  # Убираем лишний уровень директории при распаковке
       - name: Deploy on remote server
         uses: appleboy/ssh-action@master
         with:
@@ -66,7 +68,6 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
           script: |-
-            chmod 644 /home/admin/covid-bot
             cd /home/admin/covid-bot
             docker compose pull
             docker compose up -d --build
