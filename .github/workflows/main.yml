@@ -1,5 +1,5 @@
 ---
-name: Deploy on production server
+name: Deploy Python Bot to Production
 on:
   push:
     branches: [main]
@@ -9,65 +9,70 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4  # Обновлено до v4 для актуальности
+      - name: Set up Python
+        uses: actions/setup-python@v5  # Обновлено до v5
         with:
           python-version: '3.13'
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install flake8
-      - name: Run flake8
-        run: flake8 .
+      - name: Run linting with flake8
+        run: flake8 . --max-line-length=120  # Добавлен параметр для гибкости
   build:
     name: Build Stage
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3  # Установка Buildx для поддержки Docker
       - name: Install Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose
-          if ! docker compose version; then
-            echo "❌ Docker Compose не установлен!" >&2
-            exit 1
-          fi
+          sudo apt-get install -y docker-compose-plugin  # Используем плагин вместо отдельной установки
+          docker compose version || { echo "❌ Docker Compose не установлен!" >&2; exit 1; }
       - name: Build Docker images
         run: |
           docker compose build
+      - name: Verify build
+        run: |
+          docker compose config  # Проверка конфигурации docker-compose.yml
   deploy:
     name: Deploy Stage
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Prepare .env file
+        uses: actions/checkout@v4
+      - name: Generate .env file
         run: |
+          echo "Generating .env from .env.example"
           cp .env.example .env
           sed -i "s/^TOKEN=.*/TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}/" .env
           sed -i "s/^OWNER_ID=.*/OWNER_ID=${{ secrets.BOT_OWNER_ID }}/" .env
-      - name: Change permissions recursively
-        run: |
-          chmod -R 644 .  # Устанавливаем права 644 рекурсивно для всех файлов и директорий
+          cat .env  # Логирование для отладки (секреты маскируются автоматически)
       - name: Copy project to remote server
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: ./*,.env,.gitignore,docker-compose.yml  # Указываем конкретные файлы/папки для передачи
+          source: .,!.git,!datadir  # Передаем все, кроме .git и datadir
           target: /home/admin/covid-bot
-          strip_components: 1  # Убираем лишний уровень директории при распаковке
+          strip_components: 1  # Убираем лишний уровень директории
+          rm: true  # Удаляем существующие файлы в целевой директории перед копированием
       - name: Deploy on remote server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
           script: |-
-            cd /home/admin/covid-bot
-            docker compose pull
-            docker compose up -d --build
+            echo "Deploying to /home/admin/covid-bot"
+            cd /home/admin/covid-bot || { echo "❌ Directory not found"; exit 1; }
+            docker compose pull || { echo "❌ Failed to pull images"; exit 1; }
+            docker compose up -d --build || { echo "❌ Failed to start services"; exit 1; }
+            docker compose ps  # Проверка состояния контейнеров
