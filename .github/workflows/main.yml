@@ -48,7 +48,7 @@ jobs:
         run: |
           cp .env.example .env
           sed -i "s/^TOKEN=.*/TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}/" .env
-          sed -i "s/^OWNER_ID=.*/${{ secrets.BOT_OWNER_ID }}/" .env
+          sed -i "s/^OWNER_ID=.*/OWNER_ID=${{ secrets.BOT_OWNER_ID }}/" .env
       - name: Copy project to remote server
         uses: appleboy/scp-action@master
         with:
