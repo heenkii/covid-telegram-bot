@@ -1,4 +1,5 @@
-*/__pycache__/
+**/__pycache__/
+**/datadir/
 
 *.log
 *.tmp
@@ -14,8 +15,6 @@ venv/
 *.db
 database.db
 
-*/datadir/
-
 docker-compose.override.yml
 *.dockerfile
 .dockerignore
@@ -23,7 +22,6 @@ docker-compose.override.yml
 Pipfile
 Pipfile.lock
 poetry.lock
-
 
 .vscode/
 .idea/
