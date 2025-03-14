@@ -48,19 +48,24 @@ jobs:
         run: |
           echo "Generating .env from .env.example"
           cp .env.example .env
-          sed -i "s/^TOKEN=.*/TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}/" .env
-          sed -i "s/^OWNER_ID=.*/OWNER_ID=${{ secrets.BOT_OWNER_ID }}/" .env
-          cat .env  # Логирование для отладки (секреты маскируются автоматически)
+          sed -i "s|^TOKEN=.*|TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}|" .env
+          sed -i "s|^OWNER_ID=.*|OWNER_ID=${{ secrets.BOT_OWNER_ID }}|" .env
+          cat .env  # Логирование для отладки
+      - name: List files to be transferred
+        run: |
+          echo "Files in workspace:"
+          ls -la .
       - name: Copy project to remote server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: ".,!.git,!datadir" # Передаем все, кроме .git и datadir
+          source: "./*,!.git/,!datadir/" # Явно указываем все файлы в корне, исключаем .git и datadir
           target: /home/admin/covid-bot
-          strip_components: 1 # Убираем лишний уровень директории
-          rm: true # Удаляем существующие файлы в целевой директории перед копированием
+          strip_components: 1
+          rm: false # Отключаем удаление, чтобы избежать ошибок с правами
+          debug: true # Включаем отладку для подробных логов
       - name: Deploy on remote server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -72,4 +77,4 @@ jobs:
             cd /home/admin/covid-bot || { echo "❌ Directory not found"; exit 1; }
             docker compose pull || { echo "❌ Failed to pull images"; exit 1; }
             docker compose up -d --build || { echo "❌ Failed to start services"; exit 1; }
-            docker compose ps  # Проверка состояния контейнеров
+            docker compose ps
