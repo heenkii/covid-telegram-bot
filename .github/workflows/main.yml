@@ -63,7 +63,7 @@ jobs:
           echo "Listing all files in workspace:"
           ls -laR .
           echo "Checking specific files:"
-          for file in FSM/__init__.py utils/sqlighter.py Dockerfile requirements.txt; do
+          for file in src/requirements.txt src/config.py Dockerfile .env.example docker-compose.yml; do
             if [ -f "$file" ]; then
               echo "✅ $file exists"
             else
@@ -76,9 +76,9 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: "." # Передаем все, что есть
+          source: "src/,.env,docker-compose.yml" # Передаем только src/, .env и docker-compose.yml
           target: /home/admin/covid-bot
-          strip_components: 1
+          strip_components: 1 # Убираем вложенность
           rm: false
           debug: true
       - name: Deploy on remote server
