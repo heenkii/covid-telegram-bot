@@ -1,24 +1,19 @@
 ---
-name: CI/CD Pipeline
+name: Deploy on production server
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 jobs:
   test:
     name: Test Stage
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: ['3.11', '3.12', '3.13']
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.version }}
+          python-version: '3.13'
       - name: Install dependencies
         run: |
           pip install flake8
@@ -40,36 +35,35 @@ jobs:
             exit 1
           fi
       - name: Build Docker images
-        run: docker compose build
-  # deploy:
-  #   name: Deploy Stage
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-  #     - name: Prepare .env file
-  #       run: |
-  #         cp .env.example .env
-  #         echo "TOKEN=${{ secrets.TOKEN }}" >> .env
-  #         echo "OWNER_ID=${{ secrets.OWNER_ID }}" >> .env
-  #     - name: Copy project to remote server
-  #       uses: appleboy/scp-action@master
-  #       with:
-  #         host: ${{ secrets.REMOTE_HOST }}
-  #         username: ${{ secrets.REMOTE_USER }}
-  #         key: ${{ secrets.REMOTE_KEY }}
-  #         port: ${{ secrets.REMOTE_PORT }}
-  #         source: .
-  #         target: /path/to/remote/project  # замените на путь на сервере
-  #     - name: Deploy on remote server
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.REMOTE_HOST }}
-  #         username: ${{ secrets.REMOTE_USER }}
-  #         key: ${{ secrets.REMOTE_KEY }}
-  #         port: ${{ secrets.REMOTE_PORT }}
-  #         script: |-
-  #           cd /path/to/remote/project  # замените на нужный путь
-  #           docker-compose pull
-  #           docker-compose up -d --build
+        run: |
+          docker compose build
+  deploy:
+    name: Deploy Stage
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Prepare .env file
+        run: |
+          cp .env.example .env
+          sed -i "s/^token=.*/${{ secrets.TOKEN }}/" .env
+          sed -i "s/^owner_id=.*/${{ secrets.OWNER_ID }}/" .env
+      - name: Copy project to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.reMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.remOTE_KEY }}
+          source: .
+          target: /home/admin/my-website
+      - name: Deploy on remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_KEY }}
+          script: |-
+            cd /home/admin/my-website 
+            docker-compose pull
+            docker-compose up -d --build
