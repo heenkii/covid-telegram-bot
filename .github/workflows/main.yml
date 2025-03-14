@@ -44,28 +44,43 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Generate .env file
         run: |
           echo "Generating .env from .env.example"
-          cp .env.example .env
-          sed -i "s|^TOKEN=.*|TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}|" .env
-          sed -i "s|^OWNER_ID=.*|OWNER_ID=${{ secrets.BOT_OWNER_ID }}|" .env
-          cat .env  # Логирование для отладки
-      - name: List files to be transferred
+          if [ -f .env.example ]; then
+            cp .env.example .env
+            sed -i "s|^TOKEN=.*|TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}|" .env
+            sed -i "s|^OWNER_ID=.*|OWNER_ID=${{ secrets.BOT_OWNER_ID }}|" .env
+            cat .env
+          else
+            echo "❌ .env.example not found"
+            exit 1
+          fi
+      - name: Verify files in workspace
         run: |
-          echo "Files in workspace:"
-          ls -la .
+          echo "Listing all files in workspace:"
+          ls -laR .
+          echo "Checking specific files:"
+          for file in FSM/__init__.py utils/sqlighter.py Dockerfile requirements.txt; do
+            if [ -f "$file" ]; then
+              echo "✅ $file exists"
+            else
+              echo "❌ $file missing"
+            fi
+          done
       - name: Copy project to remote server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: "./*,!.git/,!datadir/" # Явно указываем все файлы в корне, исключаем .git и datadir
+          source: "." # Передаем все, что есть
           target: /home/admin/covid-bot
           strip_components: 1
-          rm: false # Отключаем удаление, чтобы избежать ошибок с правами
-          debug: true # Включаем отладку для подробных логов
+          rm: false
+          debug: true
       - name: Deploy on remote server
         uses: appleboy/ssh-action@v1.0.3
         with:
