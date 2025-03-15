@@ -57,7 +57,7 @@ jobs:
                     echo "❌ Файл covid-bot.tar пустой или не создан!" >&2
                     exit 1
                   fi
-          chmod 644 covid-bot.tar
+          chmod 644 covid-bot.tar docker-compose.yml .env
       - name: Copy project to remote server
         uses: appleboy/scp-action@master
         with:
