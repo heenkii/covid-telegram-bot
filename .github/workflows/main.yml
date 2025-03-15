@@ -13,7 +13,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.13"
+          python-version: '3.13'
       - name: Install dependencies
         run: |
           pip install flake8
@@ -38,53 +38,35 @@ jobs:
         run: |
           docker compose build
   deploy:
+    name: Deploy Stage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Generate .env file
         run: |
           cp .env.example .env
           echo "TOKEN=${{ secrets.BOT_TELEGRAM_TOKEN }}" >> .env
           echo "OWNER_ID=${{ secrets.BOT_OWNER_ID }}" >> .env
-
-      - name: Prepare files for transfer
+      - name: Build docker image > tar
         run: |
-          mkdir -p temp_deploy
-          cp -r src temp_deploy/
-          cp docker-compose.yml temp_deploy/
-          cp .env temp_deploy/
-          echo "Files in temp_deploy:"
-          ls -laR temp_deploy/
-
-      - name: Verify files exist
-        run: |
-          if [ -z "$(ls -A temp_deploy)" ]; then
-            echo "❌ No files found in temp_deploy!"
-            exit 1
-          else
-            echo "✅ Files found in temp_deploy"
-          fi
-
+          docker compose build
+          docker save -o covid-bot.tar covid-bot mongo:latest
+          chmod 644 covid-bot.tar
       - name: Copy project to remote server
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          source: "temp_deploy"
+          source: covid-bot.tar,docker-compose.yml,.env
           target: /home/admin/covid-bot
-          strip_components: 1
-          rm: false
-          debug: true
-
-      - name: Deploy on remote server
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Run on remote server
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
-          script: |
+          script: |-
             cd /home/admin/covid-bot
             docker compose up -d --build
