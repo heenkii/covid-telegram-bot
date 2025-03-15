@@ -54,15 +54,15 @@ jobs:
           docker compose build
           docker save -o covid-bot.tar covid-bot
           chmod 644 covid-bot.tar docker-compose.yml .env
-      # - name: Ensure directory ownership
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.REMOTE_HOST }}
-      #     username: ${{ secrets.REMOTE_USER }}
-      #     key: ${{ secrets.REMOTE_KEY }}
-      #     script: |
-      #       sudo mkdir -p /home/admin/covid-bot
-      #       sudo chown -R ${{ secrets.REMOTE_USER }}:${{ secrets.REMOTE_USER }} /home/admin/covid-bot
+      - name: Ensure directory ownership
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_KEY }}
+          script: |
+            sudo mkdir -p /home/admin/covid-bot
+            sudo chown -R ${{ secrets.REMOTE_USER }}:${{ secrets.REMOTE_USER }} /home/admin/covid-bot
       - name: Copy project to remote server
         uses: appleboy/scp-action@master
         with:
