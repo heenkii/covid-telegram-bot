@@ -52,7 +52,7 @@ jobs:
       - name: Build docker image > tar
         run: |
           docker compose build
-          docker save -o covid-bot.tar covid-telegram-bot-covid-bot mongo:latest
+          docker save -o covid-bot.tar covid-bot mongo:latest
           chmod 644 covid-bot.tar
       - name: Copy project to remote server
         uses: appleboy/scp-action@master

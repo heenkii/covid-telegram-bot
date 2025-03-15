@@ -9,6 +9,7 @@ services:
   covid-bot:
     build:
       context: ./src/
+    image: covid-bot
     container_name: bot
     restart: always
     depends_on: [mongoDB]
