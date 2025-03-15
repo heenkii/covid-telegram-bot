@@ -13,7 +13,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'
+          python-version: "3.13"
       - name: Install dependencies
         run: |
           pip install flake8
@@ -54,10 +54,18 @@ jobs:
           docker compose build
           docker save -o covid-bot.tar covid-bot
           if [ ! -s covid-bot.tar ]; then
-                    echo "❌ Файл covid-bot.tar пустой или не создан!" >&2
-                    exit 1
-                  fi
+            echo "❌ Файл covid-bot.tar пустой или не создан!" >&2
+            exit 1
+          fi
           chmod 644 covid-bot.tar docker-compose.yml .env
+      - name: Remove existing directory on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.REMOTE_KEY }}
+          script: |
+            rm -rf /home/admin/covid-bot
       - name: Copy project to remote server
         uses: appleboy/scp-action@master
         with:
