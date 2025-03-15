@@ -1,8 +1,10 @@
-FROM python:3.11.4-alpine
+FROM python:3.13-alpine AS builder
 WORKDIR /usr/src/app
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
+RUN pip3 install --user -r requirements.txt
 
-COPY . /usr/src/app/
-
+FROM python:3.13-alpine
+WORKDIR /usr/src/app
+COPY --from=builder /root/.local /root/.local
+COPY . .
 ENTRYPOINT ["python3", "bot.py"]

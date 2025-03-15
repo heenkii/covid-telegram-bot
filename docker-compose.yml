@@ -3,7 +3,6 @@ services:
   mongoDB:
     image: mongo:latest
     container_name: database
-    ports: [27017:27017]
     restart: always
     volumes: [./datadir:/data/db]
   covid-bot:
