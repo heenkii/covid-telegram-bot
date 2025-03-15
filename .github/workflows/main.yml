@@ -52,7 +52,7 @@ jobs:
       - name: Build docker image > tar
         run: |
           docker compose build
-          docker save -o covid-bot.tar covid-bot mongo:latest
+          docker save -o covid-bot.tar covid-bot
           if [ ! -s covid-bot.tar ]; then
                     echo "❌ Файл covid-bot.tar пустой или не создан!" >&2
                     exit 1
