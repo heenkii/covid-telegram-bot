@@ -1,19 +1,15 @@
+---
 services:
   mongoDB:
     image: mongo:latest
     container_name: database
-    ports:
-      - "27017:27017"
+    ports: [27017:27017]
     restart: always
-    volumes:
-      - "./datadir:/data/db"
-
+    volumes: [./datadir:/data/db]
   covid-bot:
     build:
       context: ./src/
     container_name: bot
     restart: always
-    depends_on:
-      - mongoDB
-    env_file:
-      - .env
+    depends_on: [mongoDB]
+    env_file: [.env]
