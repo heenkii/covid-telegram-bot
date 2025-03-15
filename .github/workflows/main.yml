@@ -61,8 +61,8 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
           script: |
-            sudo mkdir -p /home/admin/covid-bot
-            sudo chown -R ${{ secrets.REMOTE_USER }}:${{ secrets.REMOTE_USER }} /home/admin/covid-bot
+            mkdir -p /home/admin/covid-bot
+            chown -R ${{ secrets.REMOTE_USER }}:${{ secrets.REMOTE_USER }} /home/admin/covid-bot
       - name: Copy project to remote server
         uses: appleboy/scp-action@master
         with:
